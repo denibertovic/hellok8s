@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  hellok8s:
+    # TODO: switch to generating compose from nix and
+    # then we can add proper tagging and not rely on "latest"
+    image: denibertovic/hellok8s
+    # command: /bin/bash -c "hellok8s"
+    # Change to .env that's not commited to the repo
+    env_file: env.sample
+    environment:
+      - LOCAL_USER_ID=${LOCAL_USER_ID}
+    ports:
+      - 8000:8000

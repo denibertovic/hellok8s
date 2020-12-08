@@ -1,0 +1,16 @@
+.stack-work
+.env
+hellok8s.cabal
+/secrets
+*.swp
+.bash_history
+tmp.plan
+tf.out
+hellok8s/.cache
+hellok8s/.local/*
+hellok8s/result*
+hellok8s/dist
+hellok8s/dist-newstyle
+hellok8s/.ghc.environment*
+result
+/.env
