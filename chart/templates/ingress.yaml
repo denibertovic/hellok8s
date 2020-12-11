@@ -31,12 +31,6 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-          {{- if $.Values.oauth2Proxy.enabled }}
-          - path: "{{ $.Values.oauth2Proxy.path }}"
-            backend:
-              serviceName: {{ $.Values.oauth2Proxy.serviceName }}
-              servicePort: {{ $.Values.oauth2Proxy.servicePort }}
-          {{- end }}
           {{- range .paths }}
           - path: {{ . }}
             backend:
