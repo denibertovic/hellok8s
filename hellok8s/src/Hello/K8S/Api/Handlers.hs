@@ -23,13 +23,13 @@ hello :: AppM (Html ())
 hello = return html
   where html :: Html ()
         html = do
-          h2_ "We introduced an error."
+          h2_ "Hi from k8s."
 
 -- useful for demoing load balancing across pods in k8s
 whoami :: AppM (Html ())
 whoami = do
     hostname <- liftIO $ getHostName
-    let txt = ("Bad things happenning. Hostname: " <> hostname <> ".")
+    let txt = ("Hi from k8s. Hostname: " <> hostname <> ".")
     return $ html txt
   where html :: String -> Html ()
         html txt = do
