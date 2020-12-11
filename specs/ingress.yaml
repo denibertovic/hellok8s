@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: hello
+spec:
+  rules:
+  - host: CHANGETHIS.mydomain.com
+    http:
+      paths:
+      - path: /
+        backend:
+            serviceName: hello
+            servicePort: 80
