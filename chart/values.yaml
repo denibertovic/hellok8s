@@ -8,7 +8,9 @@ image:
   repository: denibertovic/hellok8s
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag: 901beb7
+  # to showcase rollbacks
+  # bad tag: 8ffe6a6
 
 appPort: 8000
 environment: Development
