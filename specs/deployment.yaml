@@ -17,6 +17,8 @@ spec:
       containers:
       - name: hello
         image: denibertovic/hellok8s:901beb7
+        # TAG with error
+        # image: denibertovic/hellok8s:8ffe6a6
         ports:
         - containerPort: 8000
 
