@@ -16,37 +16,27 @@ let
     #!${pkgs.stdenv.shell}
     ${pkgs.dockerTools.shadowSetup}
 
-    # Normally we don't have to do this but since we're using 'scratch'.... ¯\_(ツ)_/¯
-    mkdir /home
-
-    # Add local user
-    # Either use the LOCAL_USER_ID if passed in at runtime or
-    # fallback
-    USER_ID=''${LOCAL_USER_ID:-9001}
-    APP_DIR=''${APP_DIR:-/opt/app}
-    # For some reason useradd doesn't add the group for us as it should
-    # so we create it manually
-    groupadd -g $USER_ID -o user
-
-    echo "Starting with UID : $USER_ID"
-    useradd --shell /bin/bash -u $USER_ID -g user -c "The User" --create-home user
-    export HOME=/home/user
-
-    # set correct permissions on APP_DIR and subfolders
-    chown -R user. $APP_DIR
-
-    exec pid1 -u user -g user "$@"
+    exec pid1 "$@"
   '';
 
   config = {
     packageOverrides = pkgs: rec {
 
-      hellok8s-docker-image = pkgs.dockerTools.buildLayeredImage {
+       debianFromDockerHub = pkgs.dockerTools.pullImage {
+        imageName = "debian";
+        imageDigest = "sha256:f576b8067b77ff85c70725c976b7b6cde960898e2f19b9abab3fb148407614e2";
+        sha256 = "sha256:164x4gzxyg6sfapda3bas33x4q307sky15mk49mpdf4glf05xir0";
+        finalImageTag = "bullseye-slim";
+        finalImageName = "debian";
+      };
+
+      hellok8s-docker-image = pkgs.dockerTools.buildImage {
         name = "denibertovic/hellok8s";
         tag = "latest";
         # tag = "${haskellPackages.hellok8s.version}";
         # We can remove some of these packages if we don't end up needing them
         # But I like having some utilities installed
+        fromImage =  debianFromDockerHub;
         contents = [ pkgs.bash
                      pkgs.coreutils
                      pkgs.which
@@ -58,6 +48,7 @@ let
            Cmd = [ "${pkgs.haskell.lib.justStaticExecutables haskellPackages.hellok8s}/bin/hellok8s" ];
            # TODO: bake in keys and configs as well
            WorkingDir = "/opt/app";
+           User = "9001";
          };
        };
       haskellPackages =
