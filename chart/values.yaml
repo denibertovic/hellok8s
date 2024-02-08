@@ -84,3 +84,8 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+pvc:
+  name: hello
+  enabled: false
+  storageClassName: efs

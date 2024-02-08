@@ -50,6 +50,11 @@ spec:
               value: {{ .Values.environment }}
             - name: APP_PORT
               value: "{{ .Values.appPort }}"
+          {{- if .Values.pvc.enabled }}
+          volumeMounts:
+            - name: {{ .Values.pvc.name }}
+              mountPath: /data
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -63,4 +68,10 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.pvc.enabled }}
+      volumes:
+        - name: {{ .Values.pvc.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.name }}
       {{- end }}

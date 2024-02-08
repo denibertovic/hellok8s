@@ -1,0 +1,16 @@
+{{- if .Values.pvc.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.pvc.name }}
+  labels:
+    app: hello
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: {{ .Values.pvc.storageClassName }}
+  resources:
+    requests:
+      # This part is ignored but required by the PVC spec
+      storage: 5Gi
+{{- end }}
