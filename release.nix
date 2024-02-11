@@ -14,9 +14,20 @@ let
 
   docker-entrypoint = pkgs.writeScript "entrypoint.sh" ''
     #!${pkgs.stdenv.shell}
-    ${pkgs.dockerTools.shadowSetup}
+    # Add local user
+    # Either use the LOCAL_USER_ID if passed in at runtime or
+    # fallback
+    USER_ID=''${LOCAL_USER_ID:-9001}
+    APP_DIR=''${APP_DIR:-/opt/app}
 
-    exec pid1 "$@"
+    echo "Starting with UID : $USER_ID"
+    useradd --shell ${pkgs.runtimeShell} -U -u ''${USER_ID} -o -c "The App User" -m user
+    export HOME=/home/user
+
+    # set correct permissions on APP_DIR and subfolders
+    chown -R user:user $APP_DIR
+
+    exec pid1 -u user -g user "$@"
   '';
 
   config = {
@@ -24,9 +35,9 @@ let
 
        debianFromDockerHub = pkgs.dockerTools.pullImage {
         imageName = "debian";
-        imageDigest = "sha256:f576b8067b77ff85c70725c976b7b6cde960898e2f19b9abab3fb148407614e2";
-        sha256 = "sha256:164x4gzxyg6sfapda3bas33x4q307sky15mk49mpdf4glf05xir0";
-        finalImageTag = "bullseye-slim";
+        imageDigest = "sha256:79becb70a6247d277b59c09ca340bbe0349af6aacb5afa90ec349528b53ce2c9";
+        sha256 = "sha256-Ne7eMCie5tlbz43PPujeyTxiiqZK6UaYltoiMkXn7UQ=";
+        finalImageTag = "bookworm";
         finalImageName = "debian";
       };
 
@@ -36,19 +47,25 @@ let
         # tag = "${haskellPackages.hellok8s.version}";
         # We can remove some of these packages if we don't end up needing them
         # But I like having some utilities installed
+        created = "now";
         fromImage =  debianFromDockerHub;
-        contents = [ pkgs.bash
-                     pkgs.coreutils
-                     pkgs.which
-                     (pkgs.haskell.lib.justStaticExecutables haskellPackages.hellok8s)
-                     (pkgs.haskell.lib.justStaticExecutables haskellPackages.pid1)
-                   ];
+        copyToRoot = pkgs.buildEnv {
+          name =  "image-root";
+          paths = [ pkgs.stdenv
+                    pkgs.cacert
+                    pkgs.dockerTools.binSh
+                    pkgs.ps
+                    pkgs.curl
+                    pkgs.wget
+                    (pkgs.haskell.lib.justStaticExecutables haskellPackages.hellok8s)
+                    (pkgs.haskell.lib.justStaticExecutables haskellPackages.pid1)
+                  ];
+        };
         config = {
            Entrypoint = [ docker-entrypoint ];
            Cmd = [ "${pkgs.haskell.lib.justStaticExecutables haskellPackages.hellok8s}/bin/hellok8s" ];
            # TODO: bake in keys and configs as well
            WorkingDir = "/opt/app";
-           User = "9001";
          };
        };
       haskellPackages =

@@ -1,4 +1,4 @@
-{ mkDerivation, fetchFromGitHub, aeson, base, bytestring, hostname, hpack, http-media
+{ lib, mkDerivation, fetchFromGitHub, aeson, base, bytestring, hostname, hpack, http-media
 , http-types, lucid, monad-logger, mtl, servant, servant-docs
 , servant-lucid, servant-server, stdenv, text, unordered-containers
 , wai, wai-extra, warp
@@ -36,5 +36,5 @@ mkDerivation {
   enableSharedExecutables = false;
   enableLibraryProfiling = false;
   homepage = "https://github.com/denibertovic/hellok8s#readme";
-  license = stdenv.lib.licenses.gpl3;
+  license = lib.licenses.gpl3;
 }
