@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: hello
-        image: denibertovic/hellok8s:latest
+        image: denibertovic/hellok8s:sha-2d8acb96
         # (capital) True or False
         env:
           - name: SIMULATE_CRASH_LOOP
