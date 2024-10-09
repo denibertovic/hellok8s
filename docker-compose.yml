@@ -7,7 +7,7 @@ services:
     image: denibertovic/hellok8s
     # command: /bin/bash -c "hellok8s"
     # Change to .env that's not commited to the repo
-    env_file: env.sample
+    env_file: env.example
     environment:
       - LOCAL_USER_ID=${LOCAL_USER_ID}
     ports:
