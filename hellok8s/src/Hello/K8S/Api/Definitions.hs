@@ -15,7 +15,8 @@ import           Hello.K8S.Config        (Config (..))
 
 
 
-type HelloApi = "who-are-you" :> Get '[HTML] (Html ())
+type HelloApi = "debug" :> Get '[HTML] (Html ())
+                    :<|> "healthz" :> Get '[HTML] (Html ())
                     :<|> Get '[HTML] (Html ())
 
 type AppM = ReaderT Config Handler

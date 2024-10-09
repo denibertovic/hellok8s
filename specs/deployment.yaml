@@ -16,9 +16,20 @@ spec:
     spec:
       containers:
       - name: hello
-        image: denibertovic/hellok8s:901beb7
-        # TAG with error
-        # image: denibertovic/hellok8s:8ffe6a6
+        image: denibertovic/hellok8s:latest
+        # (capital) True or False
+        env:
+          - name: SIMULATE_CRASH_LOOP
+            value: "False"
         ports:
-        - containerPort: 8000
-
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http

@@ -15,7 +15,8 @@ import qualified Data.HashMap.Strict as HM
 data Config = Config
     { environment  :: Environment
     , appPort :: Int
-    }
+    , simulateCrashLoop :: Bool
+    } deriving (Eq, Show)
 
 data Environment =
     Development
@@ -27,6 +28,7 @@ mkConfig :: [(String, String)] -> IO Config
 mkConfig env = do
   return $ Config { environment = getEnv
              , appPort = requiredDefault 8000 "APP_PORT" hm
+             , simulateCrashLoop = requiredDefault False "SIMULATE_CRASH_LOOP" hm
              }
     where hm = HM.fromList env
           getEnv = requiredDefault Development "ENV" hm

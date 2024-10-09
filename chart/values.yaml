@@ -14,6 +14,8 @@ image:
 
 appPort: 8000
 environment: Development
+# (capital) True or False
+simulateCrashLoop: False
 
 imagePullSecrets: []
 nameOverride: ""

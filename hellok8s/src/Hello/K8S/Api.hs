@@ -35,4 +35,4 @@ app :: Config -> Application
 app cfg = serve helloApi (readerToServer cfg)
 
 helloServer :: ServerT HelloApi AppM
-helloServer = whoami :<|> hello
+helloServer = debug :<|> healthz :<|> hello
