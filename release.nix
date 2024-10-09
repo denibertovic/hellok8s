@@ -35,8 +35,8 @@ let
 
        debianFromDockerHub = pkgs.dockerTools.pullImage {
         imageName = "debian";
-        imageDigest = "sha256:79becb70a6247d277b59c09ca340bbe0349af6aacb5afa90ec349528b53ce2c9";
-        sha256 = "sha256-Ne7eMCie5tlbz43PPujeyTxiiqZK6UaYltoiMkXn7UQ=";
+        imageDigest = "sha256:27586f4609433f2f49a9157405b473c62c3cb28a581c413393975b4e8496d0ab";
+        sha256 = "sha256-9VhHSzRzW1dWAAXF/7B3l3vwRzGSKBrGziHmBdnVit4=";
         finalImageTag = "bookworm";
         finalImageName = "debian";
       };
